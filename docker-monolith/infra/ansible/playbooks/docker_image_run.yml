@@ -1,0 +1,5 @@
+- name: Run image app
+  hosts: all
+  become: true
+  roles:
+    - docker_app

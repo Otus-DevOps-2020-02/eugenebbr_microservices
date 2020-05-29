@@ -1,0 +1,7 @@
+{
+    "project_id":"project-id",
+    "source_image_family":"ubuntu",
+    "source_image":"ubuntu-image",
+    "machine_type":"f1-micro",
+    "zone":"europe-west1-b"
+  }

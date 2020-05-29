@@ -1,0 +1,15 @@
+plugin: gcp_compute
+projects:
+  - docker-277114
+zones:
+  - "europe-west1-b"
+auth_kind: serviceaccount
+service_account_file: /home/bender/Documents/gcp/docker-277114-ece9ad062b2e.json
+groups:
+  docker-instance: "'docker-instance' in name"
+hostnames:
+  - name
+filters:
+  - labels.environment = "stage"
+compose:
+  ansible_host: networkInterfaces[0].accessConfigs[0].natIP

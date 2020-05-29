@@ -1,0 +1,5 @@
+- name: Pre-install pip for docker
+  apt: name=python-pip state=present
+
+- name: Pre-install docker-py for docker
+  pip: name=docker-py

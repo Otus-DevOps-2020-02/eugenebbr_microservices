@@ -1,6 +1,5 @@
 #packer
-packer/variables.json
-packer/files/immutable-variables.json
+docker-monolith/infra/packer/variables.json
 
 #terraform
 *.tfstate
@@ -12,3 +11,4 @@ packer/files/immutable-variables.json
 #ansible
 *.retry
 jdauphant.nginx
+geerlingguy.docker
