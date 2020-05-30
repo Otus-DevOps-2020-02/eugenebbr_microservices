@@ -12,3 +12,5 @@ docker-monolith/infra/packer/variables.json
 *.retry
 jdauphant.nginx
 geerlingguy.docker
+
+.github/.pre-commit-config.yaml
