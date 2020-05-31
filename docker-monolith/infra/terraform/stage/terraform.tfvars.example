@@ -1,0 +1,6 @@
+project          = "projectid"
+public_key_path  = "~/.ssh/appuser.pub"
+private_key_path = "~/.ssh/appuser"
+instance_count   = 1
+env              = "stage"
+env_label        = "stage"

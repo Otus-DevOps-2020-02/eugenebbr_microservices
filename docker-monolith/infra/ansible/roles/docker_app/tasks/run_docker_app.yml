@@ -1,0 +1,7 @@
+- name: Run app from docker image
+  docker_container:
+    name: reddit
+    image: eugenebbrdocker/otus-reddit:1.0
+    state: started
+    ports:
+      - "9292:9292"

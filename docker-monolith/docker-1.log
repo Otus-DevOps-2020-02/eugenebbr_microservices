@@ -1,0 +1,40 @@
+REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
+eugenebbr/ubuntu-tmp-file   latest              934c940e983b        2 minutes ago       125MB
+ubuntu                      16.04               005d2078bdfa        2 weeks ago         125MB
+hello-world                 latest              bf756fb1ae65        4 months ago        13.3kB
+
+На основе вывода inspect для контейнера и для образа, можно сделать следующие наблюдения:
+
+1. Так как image это неизменяемая сущность, созданная на основе контейнера, в выводе inspect image есть строчка (в выводе inspect container ее нет):
+
+"Container": "649b0494f4184a54c9013a55f629f79200d7e41ab2d1c849a0a1576068b10421"
+
+2. Image имеет постоянный размер, отраженный в строчке:
+
+"VirtualSize": 124649403
+
+3. Вывод отображает все Read-Only слои в образе:
+
+"Layers": [
+                "sha256:b592b5433bbffb04389a0e6349cdba6af8d006779bbb93beb69aa77d59133be4",
+                "sha256:4a048ea09024fc68a2d21f8614d9e49f246efe0902dee85fb27ccc8ac17be73b",
+                "sha256:0d3833376c2f2b31bbaa02e419615355fd529b624b2cda1ef1dca0c856a25e73",
+                "sha256:64d2e4aaa54cf6b127584b366d73d4ab66ca40897cd88e1f9fe971e7f2e09082",
+                "sha256:ff2360139b94356a8f6353d09d08aa17cd577889176b34a28e72913f9bc1f302"
+            ]
+
+чтобы посмотреть подробнее, можно сделать docker history image:
+
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+934c940e983b        2 hours ago         /bin/bash                                       67B
+005d2078bdfa        2 weeks ago         /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B
+<missing>           2 weeks ago         /bin/sh -c mkdir -p /run/systemd && echo 'do…   7B
+<missing>           2 weeks ago         /bin/sh -c set -xe   && echo '#!/bin/sh' > /…   745B
+<missing>           2 weeks ago         /bin/sh -c rm -rf /var/lib/apt/lists/*          0B
+<missing>           2 weeks ago         /bin/sh -c #(nop) ADD file:4fe14d9555e739e4d…   125MB
+
+4. В свою очередь контейнер имеет следующую строчку, говорящую какой образ запустил контейнер:
+
+"Image": "sha256:005d2078bdfab5066ae941cea93f644f5fd25521849c870f4e1496f4526d1d5b"
+
+5. У контейнера мы уже видим настройки сети, цпу, озу и т.д. Строчки "NetworkSettings", "HostConfig".

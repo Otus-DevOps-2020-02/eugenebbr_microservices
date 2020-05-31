@@ -1,0 +1,7 @@
+---
+- name: Show info about what steps will be executed
+  debug:
+    msg: "Install python and run docker app"
+
+- include: install_python.yml
+- include: run_docker_app.yml
