@@ -1,0 +1,5 @@
+project          = "project-id"
+public_key_path  = "public_key_path"
+private_key_path = "private_key_path"
+env              = "stage"
+env_label        = "stage"
