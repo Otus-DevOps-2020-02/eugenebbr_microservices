@@ -15,9 +15,15 @@ before_script:
   - bundle install
 
 build_job:
+  before_script:
+    - echo "Building"
+  image: docker:19.03.11
   stage: build
   script:
-    - echo 'Building'
+    - cd docker-monolith
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+    - docker build -t eugenebbrdocker/reddit-app:$CI_COMMIT_SHORT_SHA .
+    - docker push eugenebbrdocker/reddit-app:$CI_COMMIT_SHORT_SHA
 
 test_unit_job:
   stage: test
