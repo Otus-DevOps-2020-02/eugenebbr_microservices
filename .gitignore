@@ -12,3 +12,6 @@ docker-monolith/infra/packer/variables.json
 *.retry
 jdauphant.nginx
 geerlingguy.docker
+
+#docker
+.env
