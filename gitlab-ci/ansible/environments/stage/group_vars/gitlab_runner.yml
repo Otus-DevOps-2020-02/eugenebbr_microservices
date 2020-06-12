@@ -5,7 +5,7 @@ gitlab_runner_runners:
     executor: docker
     docker_image: 'docker:19.03.11'
     tags:
-      - dind
+      - docker
     docker_volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/cache"

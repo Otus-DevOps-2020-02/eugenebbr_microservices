@@ -25,7 +25,7 @@ build_job:
     - docker build -t eugenebbrdocker/reddit-app:$CI_COMMIT_SHORT_SHA .
     - docker push eugenebbrdocker/reddit-app:$CI_COMMIT_SHORT_SHA
   tags:
-    - dind
+    - docker
 
 test_unit_job:
   stage: test
@@ -40,9 +40,20 @@ test_integration_job:
     - echo 'Testing 2'
 
 deploy_dev_job:
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh appuser@34.77.237.99 'docker run -d eugenebbrdocker/reddit-app:9add8b1d'
+
   stage: review
   script:
     - echo 'Deploy'
+
+    - docker run
+
   environment:
     name: dev
     url: http://dev.example.com
