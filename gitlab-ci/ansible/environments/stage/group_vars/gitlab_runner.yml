@@ -12,4 +12,4 @@ gitlab_runner_runners:
     extra_configs:
       runners.docker:
         memory: 512m
-        allowed_images: ["docker:*"]
+        allowed_images: ["docker:*","ruby:*"]
