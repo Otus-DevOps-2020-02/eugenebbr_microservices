@@ -52,11 +52,9 @@ deploy_dev_job:
     - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - ssh appuser@$DEPLOY_HOST $RUN_CONTAINER
-
   stage: review
   script:
     - echo 'Deploy'
-
   environment:
     name: dev
     url: http://dev.example.com
