@@ -15,3 +15,6 @@ geerlingguy.docker
 
 #docker
 .env
+
+#monitoring
+monitoring/mongodb_exporter/

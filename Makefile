@@ -1,0 +1,58 @@
+DOCKER_MACHINE_NAME=docker-host
+SRC_FOLDER=src
+MONGODB_EXPORTER_VERSION=v0.11.0
+
+docker_machine_create:
+	docker-machine create --driver google \
+	--google-machine-image https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts \
+	--google-machine-type \
+	n1-standard-1 \
+	--google-zone \
+	europe-west1-b \
+	${DOCKER_MACHINE_NAME}
+
+docker_machine_delete:
+	docker-machine rm ${DOCKER_MACHINE_NAME}
+
+docker_build_ui:
+	cd ${SRC_FOLDER}/ui && bash ./docker_build.sh
+
+docker_build_post-py:
+	cd ${SRC_FOLDER}/post-py && bash ./docker_build.sh
+
+docker_build_comment:
+	cd ${SRC_FOLDER}/comment && bash ./docker_build.sh
+
+docker_build_prometheus:
+	cd ./monitoring/prometheus && docker build -t $${USER_NAME}/prometheus .
+
+docker_build_mongodb_exporter:
+	cd ./monitoring && \
+	git clone https://github.com/percona/mongodb_exporter.git && \
+	cd ./mongodb_exporter && \
+	make docker DOCKER_IMAGE_NAME=$${USER_NAME}/mongodb-exporter DOCKER_IMAGE_TAG=${MONGODB_EXPORTER_VERSION}
+
+docker_build_blackbox_exporter:
+	cd ./monitoring && \
+	git clone https://github.com/prometheus/blackbox_exporter.git && \
+	cd ./blackbox_exporter && \
+	docker build -t $${USER_NAME}/blackbox-exporter .
+
+docker_build_all: docker_build_ui docker_build_post-py docker_build_comment docker_build_prometheus docker_build_mongodb_exporter
+
+docker_push_ui:
+	docker push $${USER_NAME}/ui
+
+docker_push_comment:
+	docker push $${USER_NAME}/comment
+
+docker_push_post:
+	docker push $${USER_NAME}/post
+
+docker_push_prometheus:
+	docker push $${USER_NAME}/prometheus
+
+docker_push_mongodb_exporter:
+	docker push $${USER_NAME}/mongodb-exporter:${MONGODB_EXPORTER_VERSION}
+
+docker_push_all: docker_push_ui docker_push_comment docker_push_post docker_push_prometheus docker_push_mongodb_exporter
