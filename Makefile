@@ -33,12 +33,12 @@ docker_build_mongodb_exporter:
 	make docker DOCKER_IMAGE_NAME=$${USER_NAME}/mongodb-exporter DOCKER_IMAGE_TAG=${MONGODB_EXPORTER_VERSION}
 
 docker_build_blackbox_exporter:
-	cd ./monitoring && \
-	git clone https://github.com/prometheus/blackbox_exporter.git && \
-	cd ./blackbox_exporter && \
-	docker build -t $${USER_NAME}/blackbox-exporter .
+	docker build -t $${USER_NAME}/blackbox-exporter:latest 'https://github.com/bitnami/bitnami-docker-blackbox-exporter.git#master:0/debian-10'
 
-docker_build_all: docker_build_ui docker_build_post-py docker_build_comment docker_build_prometheus docker_build_mongodb_exporter
+docker_build_alertmanager:
+	cd ./monitoring/alertmanager && docker build -t $${USER_NAME}/alertmanager .
+
+docker_build_all: docker_build_ui docker_build_post-py docker_build_comment docker_build_prometheus docker_build_mongodb_exporter docker_build_blackbox_exporter docker_build_alertmanager
 
 docker_push_ui:
 	docker push $${USER_NAME}/ui
@@ -55,4 +55,7 @@ docker_push_prometheus:
 docker_push_mongodb_exporter:
 	docker push $${USER_NAME}/mongodb-exporter:${MONGODB_EXPORTER_VERSION}
 
-docker_push_all: docker_push_ui docker_push_comment docker_push_post docker_push_prometheus docker_push_mongodb_exporter
+docker_push_blackbox_exporter:
+	docker push $${USER_NAME}/blackbox-exporter:latest
+
+docker_push_all: docker_push_ui docker_push_comment docker_push_post docker_push_prometheus docker_push_mongodb_exporter docker_push_blackbox_exporter
