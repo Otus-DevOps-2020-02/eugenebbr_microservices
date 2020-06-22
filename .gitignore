@@ -1,5 +1,5 @@
 #packer
-docker-monolith/infra/packer/variables.json
+docker/docker-monolith/infra/packer/variables.json
 
 #terraform
 *.tfstate
@@ -15,3 +15,6 @@ geerlingguy.docker
 
 #docker
 .env
+
+#monitoring
+monitoring/mongodb_exporter/
