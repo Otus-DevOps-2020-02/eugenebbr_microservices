@@ -11,8 +11,22 @@ docker_machine_create:
 	europe-west1-b \
 	${DOCKER_MACHINE_NAME}
 
+docker_machine_create_logging:
+	docker-machine create --driver google \
+	--google-machine-image https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts \
+	--google-machine-type n1-standard-1 \
+	--google-open-port 5601/tcp \
+	--google-open-port 9292/tcp \
+	--google-open-port 9411/tcp \
+	--google-zone \
+	europe-west1-b \
+	logging
+
 docker_machine_delete:
 	docker-machine rm ${DOCKER_MACHINE_NAME}
+
+docker_machine_delete_logging:
+	docker-machine rm logging
 
 docker_build_ui:
 	cd ${SRC_FOLDER}/ui && bash ./docker_build.sh
@@ -22,6 +36,8 @@ docker_build_post-py:
 
 docker_build_comment:
 	cd ${SRC_FOLDER}/comment && bash ./docker_build.sh
+
+docker_build_app: docker_build_ui docker_build_post-py docker_build_comment
 
 docker_build_prometheus:
 	cd ./monitoring/prometheus && docker build -t $${USER_NAME}/prometheus .
@@ -38,6 +54,9 @@ docker_build_blackbox_exporter:
 
 docker_build_alertmanager:
 	cd ./monitoring/alertmanager && docker build -t $${USER_NAME}/alertmanager .
+
+docker_build_fluentd:
+	cd ./logging/fluentd && docker build -t $${USER_NAME}/fluentd .
 
 docker_build_all: docker_build_ui docker_build_post-py docker_build_comment docker_build_prometheus docker_build_mongodb_exporter docker_build_blackbox_exporter docker_build_alertmanager
 
@@ -75,6 +94,12 @@ compose_up_monitoring:
 
 compose_down_monitoring:
 	docker-compose -f docker/docker-compose-monitoring.yml down
+
+compose_up_logging:
+	docker-compose -f docker/docker-compose-logging.yml up -d
+
+compose_down_logging:
+	docker-compose -f docker/docker-compose-logging.yml down
 
 compose_up_all: compose_up_app compose_up_monitoring
 
