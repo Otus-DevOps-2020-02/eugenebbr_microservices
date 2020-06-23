@@ -42,6 +42,8 @@ services:
         tag: service.post
     environment:
       - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+      - POST_DATABASE_HOST=post_db
+      - POST_DATABASE=posts
 
   comment:
     image: ${MYUSERNAME}/comment:${COMMENT_VERSION}
