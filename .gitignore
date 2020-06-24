@@ -18,3 +18,7 @@ geerlingguy.docker
 
 #monitoring
 monitoring/mongodb_exporter/
+
+#logging
+src.old
+bugged-code
