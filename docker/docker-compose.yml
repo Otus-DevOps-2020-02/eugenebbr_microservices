@@ -52,6 +52,9 @@ services:
       - reddit-be
     environment:
       - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+      - COMMENT_DATABASE_HOST=comment_db
+      - COMMENT_DATABASE=comments
+      - APP_HOME=/app
 
 volumes:
   post_db:
