@@ -26,19 +26,20 @@ docker_build_comment:
 docker_build_prometheus:
 	cd ./monitoring/prometheus && docker build -t $${USER_NAME}/prometheus .
 
-docker_build_mongodb_exporter:
-	cd ./monitoring && \
-	git clone https://github.com/percona/mongodb_exporter.git && \
-	cd ./mongodb_exporter && \
+docker_clone_mongodb_exporter:
+	test -d "./monitoring/mongodb_exporter" || (cd ./monitoring && git clone https://github.com/percona/mongodb_exporter.git)
+
+docker_build_mongodb_exporter: docker_clone_mongodb_exporter
+	cd ./monitoring/mongodb_exporter && \
 	make docker DOCKER_IMAGE_NAME=$${USER_NAME}/mongodb-exporter DOCKER_IMAGE_TAG=${MONGODB_EXPORTER_VERSION}
 
 docker_build_blackbox_exporter:
-	cd ./monitoring && \
-	git clone https://github.com/prometheus/blackbox_exporter.git && \
-	cd ./blackbox_exporter && \
-	docker build -t $${USER_NAME}/blackbox-exporter .
+	docker build -t $${USER_NAME}/blackbox-exporter:latest 'https://github.com/bitnami/bitnami-docker-blackbox-exporter.git#master:0/debian-10'
 
-docker_build_all: docker_build_ui docker_build_post-py docker_build_comment docker_build_prometheus docker_build_mongodb_exporter
+docker_build_alertmanager:
+	cd ./monitoring/alertmanager && docker build -t $${USER_NAME}/alertmanager .
+
+docker_build_all: docker_build_ui docker_build_post-py docker_build_comment docker_build_prometheus docker_build_mongodb_exporter docker_build_blackbox_exporter docker_build_alertmanager
 
 docker_push_ui:
 	docker push $${USER_NAME}/ui
@@ -55,4 +56,26 @@ docker_push_prometheus:
 docker_push_mongodb_exporter:
 	docker push $${USER_NAME}/mongodb-exporter:${MONGODB_EXPORTER_VERSION}
 
-docker_push_all: docker_push_ui docker_push_comment docker_push_post docker_push_prometheus docker_push_mongodb_exporter
+docker_push_blackbox_exporter:
+	docker push $${USER_NAME}/blackbox-exporter:latest
+
+docker_push_alertmanager:
+	docker push $${USER_NAME}/alertmanager
+
+docker_push_all: docker_push_ui docker_push_comment docker_push_post docker_push_prometheus docker_push_mongodb_exporter docker_push_blackbox_exporter docker_push_alertmanager
+
+compose_up_app:
+	docker-compose -f docker/docker-compose.yml up -d
+
+compose_down_app:
+	docker-compose -f docker/docker-compose.yml down
+
+compose_up_monitoring:
+	docker-compose -f docker/docker-compose-monitoring.yml up -d
+
+compose_down_monitoring:
+	docker-compose -f docker/docker-compose-monitoring.yml down
+
+compose_up_all: compose_up_app compose_up_monitoring
+
+compose_down_all: compose_down_app compose_down_monitoring
