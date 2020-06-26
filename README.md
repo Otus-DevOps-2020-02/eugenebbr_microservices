@@ -122,3 +122,10 @@ https://hub.docker.com/u/eugenebbrdocker
 1. В dockerfile сервиса post не описаны переменные POST_DATABASE_HOST и POST_DATABASE, решено внесением их в docker-compose.yml (В zipkin ошибка 500)
 2. В dockerfile сервиса comment не описаны переменные COMMENT_DATABASE_HOST и COMMENT_DATABASE, решено внесением их в docker-compose.yml (В zipkin ошибка 500)
 3. В bugged-code\post-py\post_app.py добавлена строчка time.sleep(3) (в zipkin задержка в 3с при обращении)
+
+***Домашнее задание N21***
+***Введение в Kubernetes***
+
+В ходе домашнего задания был поднят k8s, используя The Hard Way (https://github.com/kelseyhightower/kubernetes-the-hard-way).
+Все полученные файлы находятся в kubernetes\the_hard_way.
+В README решено не копировать многостраничное руководство.
