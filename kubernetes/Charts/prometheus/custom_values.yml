@@ -27,7 +27,7 @@ alertmanager:
   ## The URL prefix at which the container can be accessed. Useful in the case the '-web.external-url' includes a slug
   ## so that the various internal URLs are still able to access as they are in the default case.
   ## (Optional)
-  baseURL: "/"
+  baseURL: "http://reddit-alertmanager"
 
   ## Additional alertmanager container environment variable
   ## For instance to add a http_proxy
@@ -55,7 +55,7 @@ alertmanager:
     ## Must be provided if Ingress is enabled
     ##
     hosts: []
-    #   - alertmanager.domain.com
+      # - reddit-alertmanager
 
     ## alertmanager Ingress TLS configuration
     ## Secrets must be manually created in the namespace
